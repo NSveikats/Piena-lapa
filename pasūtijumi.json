@@ -1,0 +1,37 @@
+[
+	{
+		"daudzums": "3",
+		"vārds": "Džons",
+		"uzvārds": "Āboliņš",
+		"adrese": "Ādažu iela 13",
+		"komentāri": "none"
+	},
+	{
+		"daudzums": "6",
+		"vārds": "Jana",
+		"uzvārds": "Jerčaka",
+		"adrese": "Kazu iela 1",
+		"komentāri": "Atstāj pie durvīm"
+	},
+	{
+		"daudzums": "8",
+		"vārds": "Aldis",
+		"uzvārds": "Jankars",
+		"adrese": "Ādažu iela 4",
+		"komentāri": "none"
+	},
+	{
+		"daudzums": "10",
+		"vārds": "Jānis",
+		"uzvārds": "Ezis",
+		"adrese": "Uzvaras iela 3",
+		"komentāri": "Cikvien ātri iespējams, lūdzi!"
+	},
+	{
+		"daudzums": "1",
+		"vārds": "Andris",
+		"uzvārds": "Karass",
+		"adrese": "Uzvaras iela 2",
+		"komentāri": "none"
+	}
+]

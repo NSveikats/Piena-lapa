@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pasūtijumi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css" type="text/css">
+    <style>
+        body {
+            background-color: #068efd;
+        }
+         button {
+            background-color: #FFFFFF;
+            border-radius: 5px;
+            padding: 5px;
+            border: none;
+            color: #4CAF50;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            float: left;
+        }
+         button:hover {
+            background-color: #4CAF50;
+            color: #FFFFFF;
+        }
+         table {
+            background-color: #FFFFFF;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px;
+            width: 80%;
+            margin-left: auto;
+            margin-right: auto;
+            border-collapse: collapse;
+        }
+         th, td {
+            padding: 5px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+         th {
+            background-color: #4CAF50;
+            color: #FFFFFF;
+        }
+         .delete {
+            background-color: #FF0000;
+            color: #FFFFFF;
+            font-size: 12px;
+            padding: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <button id="IzietBtn">Iziet no konta</button>
+    <table id="pasūtijumiTable">
+        <thead>
+            <tr>
+                <th>Piena daudzums, l</th>
+                <th>Vārds</th>
+                <th>Uzvārds</th>
+                <th>Adrese</th>
+                <th>Komentāri</th>
+                <th>darbība</th>
+            </tr>
+        </thead>
+        <tbody id="pasūtijumiBody">
+        </tbody>
+    </table>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        var pasūtijumi = [];
+        $(function() {
+            loadpasūtijumi();
+            $("#IzietBtn").on("click", function() {
+                location.href = "Mājaslapa.html";
+            });
+        });
+         function loadpasūtijumi() {
+            $.getJSON("pasūtijumi.json")
+                .done(function(data) {
+                    pasūtijumi = data;
+                    renderpasūtijumi();
+                })
+                .fail(function(jqxhr, textStatus, error) {
+                    $("#pasūtijumiBody").html("<tr><td colspan='6'>Kļūda pasūtijumi parādīšanā.</td></tr>");
+                    console.log(error);
+                });
+        }
+         function renderpasūtijumi() {
+            var html = "";
+            pasūtijumi.forEach(function(order, i) {
+                html += '<tr>';
+                html += '<td>' + order.daudzums + '</td>';
+                html += '<td>' + order.vārds + '</td>';
+                html += '<td>' + order.uzvārds + '</td>';
+                html += '<td>' + order.adrese + '</td>';
+                html += '<td>' + order.komentāri + '</td>';
+                html += "<td><button class=\"delete\" onclick=\"deleteOrder('" + i + "')\">Dzēst</button></td>";
+                html += '</tr>';
+            });
+            $("#pasūtijumiBody").html(html);
+        }
+         function deleteOrder(saraksts) {
+            pasūtijumi.splice(saraksts, 1);
+            $.ajax({
+                    url: "pasūtijumi.json",
+                    type: "PUT",
+                    dataType: "json",
+                    contentType: "application/json",
+                    data: JSON.stringify(pasūtijumi)
+                })
+                .done(function(response) {
+                    alert("Pasūtijums izdzēsts!");
+                    loadpasūtijumi();
+                })
+                .fail(function(jqxhr, textStatus, error) {
+                    alert("Kļūda dzēšot pasūtijumu.");
+                    console.log(error);
+                });
+        }
+        //tas pats error, kas Mājaslapa.html, bet vismaz fail funkcija strādā
+    </script>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Mājaslapa</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css" type="text/css">
+	<style>
+		body {
+			background-color: #068efd;
+		}
+ 		h1 {
+			background-color: #4CAF50;
+			text-align: center;
+			color: #FFFFFF;
+			margin-bottom: 0cm;
+		}
+		h4 {
+			background-color: #4CAF50;
+			text-align: center;
+			color: #FFFFFF;
+			margin-top: 0;
+		}
+ 		form {
+			background-color: #4CAF50;
+			padding: 20px;
+			border-radius: 10px;
+		}
+ 		input[type=text], select, textarea {
+			border-radius: 10px;
+			background-color: #FFFFFF;
+			height: 30px;
+			margin-bottom: 10px;
+			border: none;
+			padding: 5px;
+			width: 100%;
+		}
+ 		button[type=submit] {
+			background-color: #FFFFFF;
+			border-radius: 10px;
+			padding: 10px;
+			border: none;
+			color: #4CAF50;
+			font-weight: bold;
+			cursor: pointer;
+			transition: background-color 0.3s ease;
+		}
+ 		button[type=submit]:hover {
+			background-color: #4CAF50;
+			color: #FFFFFF;
+		}
+	</style>
+</head>
+<body>
+	<h1>Piens no Ligitas Kalniņas</h1>
+	<h4>Pasūti pienu caur doto formu ievadot visu pieprasīto informāciju</h4>
+	<div class="row">
+		<div class="col-xs-12 col-md-6">
+			<form id="sūtīt-forma">
+				<legend style="font-weight: bolder; color: antiquewhite;">Pasūtijums</legend>
+				<br>
+				<label for="daudzums">Piena daudzums</label>
+				<select id="daudzums" name="daudzums">
+					<option value="1">1 litrs</option>
+					<option value="2">2 litri</option>
+					<option value="3">3 litri</option>
+					<option value="4">4 litri</option>
+					<option value="5">5 litri</option>
+					<option value="6">6 litri</option>
+					<option value="7">7 litri</option>
+					<option value="8">8 litri</option>
+					<option value="9">9 litri</option>
+					<option value="10">10 litri</option>
+				</select>
+				<label for="vārds">Vārds:</label>
+				<input type="text" id="vārds" name="vārds" required>
+				<label for="uzvārds">Uzvārds:</label>
+				<input type="text" id="uzvārds" name="uzvārds" required>
+				<label for="adrese">Adrese:</label>
+				<textarea id="adrese" name="adrese" placeholder="Ievadiet savu adresi..." required></textarea>
+				<label for="komentāri">Komentāri:</label>
+				<textarea id="komentāri" name="komentāri" placeholder="Ievadiet savus komentārus..."></textarea>
+				<button type="submit" value="Submit">Sūtīt</button>
+			</form>
+		</div>
+		<div class="col-xs-12 col-md-6">
+			<form id="ieiet-forma">
+				<legend style="font-weight: bolder; color: antiquewhite;">Ieiešana</legend>
+			    <ul>
+					<li>
+					<label for="username">Lietotajvārds:</label>
+					<input type="text" id="username" name="username" required>
+					</li>
+					<li>
+					<label for="password">Parole:</label>
+					<input type="password" id="password" name="password" required>
+					<br>
+					<button type="submit" value="Submit">Ieiet</button>
+				    </li>
+			    </ul>
+			</form>
+		</div>
+	</div>
+	<script>
+		document.getElementById("sūtīt-forma").addEventListener("submit", function(event){
+			event.preventDefault();
+			var daudzums = document.getElementById("daudzums").value;
+			var vārds = document.getElementById("vārds").value;
+			var uzvārds = document.getElementById("uzvārds").value;
+			var adrese = document.getElementById("adrese").value;
+			var komentāri = document.getElementById("komentāri").value;
+			var data = {
+				"daudzums": daudzums,
+				"vārds": vārds,
+				"uzvārds": uzvārds,
+				"adrese": adrese,
+				"komentāri": komentāri
+			};
+			fetch("pasūtijumi.json", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify(data)
+			})
+			.then(function(response){
+				if(response.ok){
+					alert("Pasutijums saņemts!");
+					document.getElementById("sūtīt-forma").reset();
+				}
+				else{
+					alert("Kļūda - neizdevās pasūtīt.");
+				}
+			})
+			.catch(function(error){
+				alert("Kļūda - neizdevās pasūtīt.");
+				console.log(error);
+			});
+			// Sūtijuma Kods itkā ir pareizs, bet nestrādā palaižot clientside un man neizdevās palaist live page caur Github, tapēc neēsu drošs par funkcionalitāti.
+		});
+ 		document.getElementById("ieiet-forma").addEventListener("submit", function(event){
+			event.preventDefault();
+			var username = document.getElementById("username").value;
+			var password = document.getElementById("password").value;
+			fetch("login.json")
+			.then(function(response){
+				return response.json();
+			})
+			.then(function(data){
+				if(data.username == username && data.password == password){
+					window.location.href = "Pasūtijumi.html";
+				}
+				else{
+					alert("Parole vai lietotājvārds neatbilst!");
+				}
+			})
+			.catch(function(error){
+				alert("Kļūda - neizdevās ieiešana.");
+				console.log(error);
+			});
+		});
+	</script>
+</body>
+</html>
